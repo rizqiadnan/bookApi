@@ -2,6 +2,7 @@ package main
 
 import (
 	// "net/http"
+	"log"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,23 +10,33 @@ import (
 	"github.com/rizqiadnan/bookApi/models"
 )
 
+func init() {
+	config, err := models.LoadConfig(".")
+	if err != nil {
+		log.Fatalln("Failed to load environment variables! \n", err.Error())
+	}
+	models.ConnectDatabase(&config)
+}
+
 func main() {
 	r := gin.Default()
 
 	// Models connect database
-	models.ConnectDatabase()
+	// models.ConnectDatabase()
+
+	public := r.Group("/api")
 
 	// Books
 	// Get Books data
-	r.GET("/books", controllers.FindBooks)
+	public.GET("/books", controllers.FindBooks)
 	// Get Books data by Id
-	r.GET("/books/:id", controllers.FindBooksById)
+	public.GET("/books/:id", controllers.FindBooksById)
 	// PATCH / Update Books
-	r.PATCH("/books/:id", controllers.UpdateBook)
+	public.PATCH("/books/:id", controllers.UpdateBook)
 	// POST Book data
-	r.POST("/books", controllers.CreateBook)
+	public.POST("/books", controllers.CreateBook)
 	// DELETE Book data
-	r.DELETE("/books/:id", controllers.DeleteBook)
+	public.DELETE("/books/:id", controllers.DeleteBook)
 
 	// Home
 	r.GET("/", func(c *gin.Context) {
