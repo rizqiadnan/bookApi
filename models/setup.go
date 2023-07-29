@@ -37,7 +37,12 @@ var DB *gorm.DB
 // Connection using mysql
 func ConnectDatabase(config *Config) {
 	var err error
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.DBUserName, config.DBUserPassword, config.DBHost, config.DBPort, config.DBName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		config.DBUserName,
+		config.DBUserPassword,
+		config.DBHost,
+		config.DBPort,
+		config.DBName)
 	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	// 	// describe error message
